@@ -207,7 +207,7 @@ const skills = [
     attributes: {
       rotate: '',
       board: '',
-      jump: true,
+      jump: false,
       degree: 0,
     },
     category: 'start',
@@ -218,11 +218,11 @@ const skills = [
       {
         type: 'video',
         platform: 'youtube',
-        id: '',
-        start: 0,
-        title: '',
+        id: 'WYEgCXNBk_M',
+        start: 19,
+        title: 'Waterstart Boat Getting Up...Wakeboarding',
         lang: 'de',
-        channel: '',
+        channel: 'WaketownBerlin',
       },
     ],
   },
@@ -230,7 +230,7 @@ const skills = [
     attributes: {
       rotate: '',
       board: '',
-      jump: true,
+      jump: false,
       degree: 0,
     },
     category: 'start',
@@ -253,7 +253,7 @@ const skills = [
     attributes: {
       rotate: '',
       board: '',
-      jump: true,
+      jump: false,
       degree: 0,
     },
     category: 'start',
