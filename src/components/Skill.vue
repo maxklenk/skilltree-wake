@@ -20,7 +20,8 @@
       v-bind:class="skillClasses()"
       v-on:click="select()"
     >
-      <div class="" >
+      <div class="h-full relative">
+        <div class="h-full w-full videoBox"></div>
         <img
           class="h-full w-full"
           v-bind:src="'https://img.youtube.com/vi/' + skill.resources[0].id + '/hqdefault.jpg'"
@@ -67,14 +68,40 @@ export default {
   },
   methods: {
     select() {
+      let elment = this.$el;
       if (!this.state.selected) {
+        // styling
         this.skillStyling = {
-          transform: 'translate3d(' + -(this.$el.children[0].offsetLeft - window.scrollX) + 'px, ' + -(this.$el.children[0].offsetTop - window.scrollY) + 'px, 0)',
+          transform: 'translate3d(' + -(elment.children[0].offsetLeft - window.scrollX) + 'px, ' + -(elment.children[0].offsetTop - window.scrollY) + 'px, 0)',
         };
         this.state.selected = true;
+
+        // start video
+        if (!this.player) {
+          this.player = new window.YT.Player(elment.getElementsByClassName('videoBox')[0], {
+            height: '390',
+            width: '640',
+            videoId: this.skill.resources[0].id,
+            events: {
+              'onReady': function(event) {
+                event.target.playVideo();
+              },
+              'onStateChange': function(event) {
+                if (event.data === window.YT.PlayerState.PLAYING) {
+                  elment.getElementsByClassName('videoBox')[0].classList.add('is-playing');
+                }
+              }
+            }
+          });
+        } else {
+          this.player.playVideo();
+          elment.getElementsByClassName('videoBox')[0].classList.add('is-playing');
+        }
       } else {
         this.skillStyling = {};
         this.state.selected = false;
+        elment.getElementsByClassName('videoBox')[0].classList.remove('is-playing');
+        this.player.pauseVideo();
       }
     },
     getColorWeight(level) {
@@ -87,7 +114,7 @@ export default {
         `bg-${check.color}-100`,
       ];
     },
-    checkUpdate(check, name, index) {
+    checkUpdate(check, name) {
       this.state.checks[name] = (this.state.checks[name] + 1) % (this.checks[name].level + 1);
     },
     skillClasses() {
@@ -109,6 +136,16 @@ export default {
 };
 </script>
 
+<style lang="scss">
+  .videoBox {
+    position: absolute;
+    opacity: 0;
+
+    &.is-playing {
+      opacity: 1;
+    }
+  }
+</style>
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   .skill-place {
@@ -119,7 +156,7 @@ export default {
   .skill {
     width: 480px;
     height: 480px;
-    transition: all 400ms;
+    transition: transform 400ms;//, width 200ms, height 200ms;
     transform: translate3d(0, 0, 0);
 
     &.is-active {
@@ -130,7 +167,9 @@ export default {
       .rounded-full {
         border-radius: 30px;
       }
-
+      .check {
+        z-index: 20;
+      }
       .check-0 {
         top: 0;
         right: 69px;
