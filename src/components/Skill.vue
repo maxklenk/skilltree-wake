@@ -72,6 +72,8 @@ export default {
   props: {
     checks: Object,
     skill: Object,
+    progress: Object,
+    saveProgress: Function,
   },
   methods: {
     select() {
@@ -117,28 +119,33 @@ export default {
     checkClasses(check, name, index) {
       return [
         `check-${index}`,
-        `border-${check.color}-${this.getColorWeight(this.state.checks[name])}`,
+        this.progress[this.skill.id] ? `border-${check.color}-${this.getColorWeight(this.progress[this.skill.id][name])}`: ``,
         `bg-${check.color}-100`,
         `hover:text-white`,
         `hover:bg-${check.color}-500`,
       ];
     },
     checkUpdate(check, name) {
-      this.state.checks[name] = (this.state.checks[name] + 1) % (this.checks[name].level + 1);
+      this.progress[this.skill.id][name] = (this.progress[this.skill.id][name] + 1) % (this.checks[name].level + 1);
+      this.saveProgress(this.skill.id, this.progress[this.skill.id]);
     },
     skillClasses() {
+      if (!this.progress[this.skill.id]) {
+        return [];
+      }
+
       let highest = null;
-      for (const check in this.state.checks) {
+      for (const check in this.progress[this.skill.id]) {
         if (highest == null) {
           highest = check;
         }
-        if (this.state.checks[check]) {
+        if (this.progress[this.skill.id][check]) {
           highest = check;
         }
       }
 
       return [
-        `border-${this.checks[highest].color}-${this.getColorWeight(this.state.checks[highest])}`,
+        `border-${this.checks[highest].color}-${this.getColorWeight(this.progress[this.skill.id][highest])}`,
       ];
     },
   },

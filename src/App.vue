@@ -33,7 +33,7 @@
           v-bind:class="colors[level % 2][index % 2]"
           >
           <div class="flex justify-center">
-            <Skill v-bind:checks="checks" v-bind:skill="skill" v-for="skill in skillsInCategoryAndLevel(category, level)"/>
+            <Skill v-bind:checks="checks" v-bind:skill="skill" v-bind:saveProgress="saveProgress" v-bind:progress="progress" v-for="skill in skillsInCategoryAndLevel(category, level)"/>
           </div>
         </td>
       </tr>
@@ -52,6 +52,7 @@ export default {
   },
   data() {
     return {
+      progress: {},
       checks: {
         theory: {
           icon: 'book',
@@ -94,7 +95,7 @@ export default {
           'bg-indigo-200',
         ],
       ],
-      skills: skills
+      skills: skills,
     };
   },
   methods: {
@@ -103,7 +104,36 @@ export default {
         return skill.category === category && skill.level === level;
       });
     },
-  }
+    saveProgress(skill, data) {
+      this.progress[skill] = data;
+      localStorage.progress = JSON.stringify(this.progress);
+    },
+  },
+  mounted() {
+    let progress = {};
+    if (localStorage.getItem('progress')) {
+      try {
+        progress = JSON.parse(localStorage.getItem('progress'));
+      } catch(e) {
+        localStorage.removeItem('progress');
+        progress = {};
+      }
+    }
+
+    // fill with skills
+    for (let id in this.skills) {
+      let skillId = this.skills[id]['id'];
+      if (!progress[skillId]) {
+        progress[skillId] = {
+          theory: 0,
+          regular: 0,
+          switch: 0,
+        };
+      }
+    }
+
+    this.progress = progress;
+  },
 };
 
 // load youtube iframe_api
