@@ -16,6 +16,13 @@
     </div>
 
     <div
+      class="close rounded-full shadow flex justify-center items-center absolute border-4 cursor-pointer"
+      v-on:click="select()"
+    >
+      X
+    </div>
+
+    <div
       class="rounded-full overflow-hidden shadow-lg h-full w-full bg-white border-8"
       v-bind:class="skillClasses()"
       v-on:click="select()"
@@ -112,6 +119,8 @@ export default {
         `check-${index}`,
         `border-${check.color}-${this.getColorWeight(this.state.checks[name])}`,
         `bg-${check.color}-100`,
+        `hover:text-white`,
+        `hover:bg-${check.color}-500`,
       ];
     },
     checkUpdate(check, name) {
@@ -156,7 +165,7 @@ export default {
   .skill {
     width: 480px;
     height: 480px;
-    transition: transform 400ms;//, width 200ms, height 200ms;
+    transition: transform 400ms;
     transform: translate3d(0, 0, 0);
 
     &.is-active {
@@ -166,6 +175,10 @@ export default {
 
       .rounded-full {
         border-radius: 30px;
+      }
+      .close {
+        display: flex;
+        z-index: 20;
       }
       .check {
         z-index: 20;
@@ -183,9 +196,24 @@ export default {
 
     }
   }
+  .close {
+    display: none;
+    width: 64px;
+    height: 64px;
+    background: white;
+    top: 10px;
+    left: 10px;
+
+    &:hover {
+      border-color: white;
+      background: gray;
+      color: white;
+    }
+  }
   .check {
     width: 64px;
     height: 64px;
+    z-index: 5;
   }
   .check-0 {
     top: 34px;
