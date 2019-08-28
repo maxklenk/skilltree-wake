@@ -44,9 +44,9 @@
 <!--          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"-->
 <!--          allowfullscreen-->
 <!--        ></iframe>-->
-      </div>
-      <div class="flex justify-center p-4">
-        <h2 class="text-xl leading-tight">{{ skill.name }}</h2>
+        <div class="skill-name">
+          <h2 class="text-xl leading-tight">{{ skill.name }}</h2>
+        </div>
       </div>
     </div>
   </div>
@@ -200,7 +200,9 @@ export default {
       .check-2 {
         top: 77px;
       }
-
+      .skill-name {
+        display: none;
+      }
     }
   }
   .close {
@@ -233,5 +235,12 @@ export default {
   .check-2 {
     top: 117px;
     right: 0;
+  }
+  .skill-name {
+    position: absolute;
+    bottom: 0;
+    padding: 20px;
+    background: white;
+    width: 100%;
   }
 </style>
